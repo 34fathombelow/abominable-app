@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abominable-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: abominable-app
+  template:
+    metadata:
+      labels:
+        app: abominable-app
+    spec:
+      containers:
+      - name: abominable-container
+        image: busybox
+        args:
+        - /bin/sh
+        - -c
+        - >
+          echo "Starting Pod..."; sleep 3600
+        livenessProbe:
+          exec:
+            command:
+            - /bin/false
+          initialDelaySeconds: 60
+          periodSeconds: 60
