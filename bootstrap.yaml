@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: abominable-app
+spec:
+  destination:
+    namespace: abominable
+    server: http://cluster-dev:8001
+  source:
+    path: app
+    repoURL: https://github.com/34fathombelow/abominable-app.git
+    targetRevision: HEAD
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
