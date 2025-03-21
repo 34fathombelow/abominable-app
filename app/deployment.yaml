@@ -12,6 +12,7 @@ spec:
       labels:
         app: abominable-app
     spec:
+      serviceAccountName: abominable-sa
       containers:
       - name: abominable-container
         image: bitnami/kubectl:latest
