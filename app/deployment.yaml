@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: abominable-deployment
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: abominable-app
