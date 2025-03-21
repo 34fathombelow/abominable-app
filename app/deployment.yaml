@@ -27,5 +27,5 @@ spec:
             kubectl patch deployment abominable-deployment \
               --type='merge' \
               -p "{\"metadata\": {\"annotations\": {\"abominable-time\": \"$(date +%s)\"}}}";
-            sleep 60;
+            sleep 5;
           done
