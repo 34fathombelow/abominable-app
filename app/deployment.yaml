@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: abominable-deployment
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: abominable-app
@@ -14,15 +14,22 @@ spec:
     spec:
       containers:
       - name: abominable-container
-        image: busybox
-        args:
+        image: bitnami/kubectl:latest
+        command:
         - /bin/sh
         - -c
-        - >
-          echo "Starting Pod..."; sleep 3600
-        livenessProbe:
-          exec:
-            command:
-            - /bin/false
-          initialDelaySeconds: 60
-          periodSeconds: 60
+        - |
+          while true; do
+            echo "Patching self with random annotation...";
+            kubectl patch deployment abominable-deployment \
+              -p "{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"abominable-time\": \"$(date +%s)\"}}}}}";
+            sleep 60;
+          done
+        env:
+        - name: KUBERNETES_SERVICE_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: KUBERNETES_SERVICE_PORT
+          value: "6443"
+      restartPolicy: Always
