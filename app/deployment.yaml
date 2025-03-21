@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: abominable-deployment
+  annotations:
+    abominable-static: "initial"
 spec:
   replicas: 4
   selector:
@@ -21,16 +23,9 @@ spec:
         - -c
         - |
           while true; do
-            echo "Patching self with random annotation...";
+            echo "Patching Deployment metadata annotation...";
             kubectl patch deployment abominable-deployment \
-              -p "{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"abominable-time\": \"$(date +%s)\"}}}}}";
+              --type='merge' \
+              -p "{\"metadata\": {\"annotations\": {\"abominable-time\": \"$(date +%s)\"}}}";
             sleep 60;
           done
-        env:
-        - name: KUBERNETES_SERVICE_HOST
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        - name: KUBERNETES_SERVICE_PORT
-          value: "6443"
-      restartPolicy: Always
